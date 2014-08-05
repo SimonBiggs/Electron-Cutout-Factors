@@ -15,22 +15,26 @@ On Windows 7 64-bit I installed the following:
 Running the code
 ----------------
 
-Edit the desired parameters within the csv file: <br>
-`input/parameters.csv`
+Edit the desired parameters within the csv file:
 
-Place input tables in csv format for each applicator and energy within the directory: <br>
-`input/data/`
+    input/parameters.csv
 
--Note: first row of these input files are not read by the program. It is expected that "width, length, and factor" will be written there.
+Place input tables in csv format for each applicator and energy within the directory:
+
+    input/data/
+
+**Note:** _first row of these input files are not read by the program. It is expected that "width, length, and factor" will be written there._
 
 
-Execute: <br>
-`runmodel.py`
+Execute:
+
+    runmodel.py
 
 
 
 Reviewing the results
 ---------------------
 
-The output data and respective reports can be found within: <br>
-`output/YYYYmmdd_HHMMSS`
+The output data and respective reports can be found within:
+
+    output/YYYYmmdd_HHMMSS
