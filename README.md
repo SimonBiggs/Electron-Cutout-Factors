@@ -1,44 +1,35 @@
 Electron-Cutout-Factors
 =======================
 
-  Dependencies
-================
+Dependencies
+------------
 
 On Windows 7 64-bit I installed the following:
 
-Installed Anaconda3 64-bit:
-http://continuum.io/downloads#py34
-
-Installed pywin32 64-bt:
-http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/pywin32-219.win-amd64-py3.4.exe/download
-
-Installed pandoc:
-https://github.com/jgm/pandoc/releases
-
-Installed node.js:
-http://nodejs.org/
+* [Anaconda3 64-bit](http://continuum.io/downloads#py34)
+* [pywin32 64-bt](http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/pywin32-219.win-amd64-py3.4.exe/download)
+* [pandoc](https://github.com/jgm/pandoc/releases)
+* [node.js](http://nodejs.org/)
 
 
-
-  Running the code
-====================
+Running the code
+----------------
 
 Edit the desired parameters within the csv file:
-input/parameters.csv
+`input/parameters.csv`
 
 Place input tables in csv format for each applicator and energy within the directory:
-input/data/
+`input/data/`
 
--Note: first row is not read by the program, it is expected that "width, length, and factor" is written there.
-
+-Note: first row of these input files are not read by the program. It is expected that "width, length, and factor" will be written there.
 
 Execute:
-runmodel.py
+`runmodel.py`
 
 
 
-  Reviewing the results
-=========================
+Reviewing the results
+---------------------
 
 The output data and respective reports can be found within:
-output/YYYYmmdd_HHMMSS
+`output/YYYYmmdd_HHMMSS`
