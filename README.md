@@ -12,8 +12,8 @@ On Windows 7 64-bit I installed the following:
 * [node.js](http://nodejs.org/)
 
 
-Running the code
-----------------
+Running the model
+-----------------
 
 Edit the desired parameters within the csv file:
 
