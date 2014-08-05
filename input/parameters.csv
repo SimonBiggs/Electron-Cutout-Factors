@@ -1,1 +1,4 @@
-This column read by program
+gapThreshold,130
+giveThreshold,0.4
+figureElev,30
+figureAzim,-140
