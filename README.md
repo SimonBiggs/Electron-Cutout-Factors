@@ -15,15 +15,16 @@ On Windows 7 64-bit I installed the following:
 Running the code
 ----------------
 
-Edit the desired parameters within the csv file:
+Edit the desired parameters within the csv file: <br>
 `input/parameters.csv`
 
-Place input tables in csv format for each applicator and energy within the directory:
+Place input tables in csv format for each applicator and energy within the directory: <br>
 `input/data/`
 
 -Note: first row of these input files are not read by the program. It is expected that "width, length, and factor" will be written there.
 
-Execute:
+
+Execute: <br>
 `runmodel.py`
 
 
