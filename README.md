@@ -77,3 +77,17 @@ This data is divided into folders according to the `input/data/` filename. Withi
  * `*_report.html` — A printout of the model code that was run for this data set.
  * `interpolation-table.csv` — A printout of the interpolation table with the width and ratio resolutions defined in `input/parameters.csv`.
  * `predicted-cutouts.csv` — A printout of the predicted cutouts that were requested within the corresponding csv file in `input/requested-cutouts/`. This only appears if cutout factors were requested. A factor is left blank if either the give or the gap parameters were above the threshold values defined in `input/parameters.csv`.
+
+
+
+No waranty
+----------
+BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
+FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
+OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES
+PROVIDE THE PROGRAM "AS IS" WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED
+OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
+MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE.  THE ENTIRE RISK AS
+TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU.  SHOULD THE
+PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING,
+REPAIR OR CORRECTION.
