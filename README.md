@@ -23,7 +23,6 @@ Place input tables in csv format for each applicator and energy within the direc
 
     input/data/
 
-**Note:** _first row of these input files are not read by the program. It is expected that "width, length, and factor" will be written there._
 
 
 Execute:
