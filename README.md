@@ -40,7 +40,7 @@ Place input tables in **csv** format for each applicator and energy within the d
 
     input/data/
     
-The width parameter (minor axis) is less than or equal to the length parameter (major axis) of the cut-out shape. These lengths and widths can be defined at either 95 cm or 100 cm SSD as long as the use is consistent.
+For each cutout a length, width, and factor needs to be inputted. These lengths and widths can be defined at either 95 cm or 100 cm SSD as long as the use is consistent.
 
 The model will be run for every file csv file within this directory. In order to speed up modelling archive the data files that are not currently being used.
 
