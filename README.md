@@ -10,10 +10,10 @@ Dependencies
 
 On Windows 7 64-bit I installed the following:
 
-* [Anaconda3 64-bit](http://continuum.io/downloads#py34)
+* [Anaconda3 64-bit](http://repo.continuum.io/anaconda3/Anaconda3-2.0.1-Windows-x86_64.exe)
 * [pywin32 64-bt](http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/pywin32-219.win-amd64-py3.4.exe/download)
-* [pandoc](https://github.com/jgm/pandoc/releases)
-* [node.js](http://nodejs.org/)
+* [pandoc](https://github.com/jgm/pandoc/releases/download/1.12.4.2/pandoc-1.12.4.2-1-windows.msi)
+* [node.js](http://nodejs.org/dist/v0.10.30/x64/node-v0.10.30-x64.msi)
 
 
 User parameters
