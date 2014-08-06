@@ -80,7 +80,7 @@ This data is divided into folders according to the `input/data/` filename. Withi
 
 
 
-No waranty
+No warranty
 ----------
 BECAUSE THE PROGRAM IS LICENSED FREE OF CHARGE, THERE IS NO WARRANTY
 FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW.  EXCEPT WHEN
