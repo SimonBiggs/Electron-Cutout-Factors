@@ -1,4 +1,6 @@
 gapThreshold,130
-giveThreshold,0.4
+giveThreshold,0.2
 figureElev,30
 figureAzim,-140
+widthInterpResolution,20
+ratioInterpResolution,20
