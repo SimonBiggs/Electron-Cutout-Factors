@@ -16,24 +16,47 @@ On Windows 7 64-bit I installed the following:
 * [node.js](http://nodejs.org/)
 
 
-Running the model
------------------
+User parameters
+---------------
 
 Edit the desired parameters within the csv file:
 
     input/parameters.csv
 
-Place input tables in csv format for each applicator and energy within the directory:
+The parameters available for editing are the following:
+
+ * `gapThreshold` — The cutoff for the gap parameter
+ * `giveThreshold` — the cutoff for the give parameter
+ * `figureElev` — The elevation of the 3D plots within the reports
+ * `figureAzim` — The rotation of the 3D plots within the reports
+ * `widthInterpResolution` — The number of values along the width axis to be outputted in the interpolation table
+ * `ratioInterpResolution` — The number of values along the ratio axis to be outputted in the interpolation table
+
+
+Input data
+----------
+
+Place input tables in **csv** format for each applicator and energy within the directory:
 
     input/data/
+    
+The width parameter (minor axis) is less than or equal to the length parameter (major axis) of the cut-out shape. These lengths and widths can be defined at either 95 cm or 100 cm SSD as long as the use is consistent.
 
-Place a table of requested cutouts within the directory (the filename must match the data set):
+The model will be run for every file csv file within this directory. In order to speed up modelling archive the data files that are not currently being used.
+
+
+Requested cutouts
+-----------------
+
+Place a csv table of requested cutouts within the directory:
 
     input/requested-cutouts/
     
+Note: the filename of these requested cutouts must be the same as the corresponding data file given in `input/data/`.
 
 
-
+Running the model
+-----------------
 
 Execute:
 
