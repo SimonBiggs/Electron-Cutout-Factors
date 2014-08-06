@@ -1871,12 +1871,12 @@ In&nbsp;[8]:
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-{&apos;figureAzim&apos;: -140.0,
- &apos;ratioInterpResolution&apos;: 20.0,
+{&apos;widthInterpResolution&apos;: 20.0,
  &apos;gapThreshold&apos;: 130.0,
- &apos;widthInterpResolution&apos;: 20.0,
  &apos;giveThreshold&apos;: 0.2,
- &apos;figureElev&apos;: 30.0}
+ &apos;figureElev&apos;: 30.0,
+ &apos;figureAzim&apos;: -140.0,
+ &apos;ratioInterpResolution&apos;: 20.0}
 </pre>
 </div>
 
@@ -4093,7 +4093,7 @@ In&nbsp;[18]:
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.legend.Legend at 0x924bdd8&gt;
+&lt;matplotlib.legend.Legend at 0x9212da0&gt;
 </pre>
 </div>
 
@@ -7016,7 +7016,7 @@ In&nbsp;[20]:
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.legend.Legend at 0x8fcc278&gt;
+&lt;matplotlib.legend.Legend at 0x91fd6d8&gt;
 </pre>
 </div>
 
@@ -9825,7 +9825,7 @@ In&nbsp;[21]:
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.text.Text at 0x912e898&gt;
+&lt;matplotlib.text.Text at 0x8d3d828&gt;
 </pre>
 </div>
 
@@ -13216,7 +13216,7 @@ In&nbsp;[22]:
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.text.Text at 0x930e550&gt;
+&lt;matplotlib.text.Text at 0x92cd278&gt;
 </pre>
 </div>
 
@@ -15804,7 +15804,7 @@ In&nbsp;[24]:
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.text.Text at 0x946d748&gt;
+&lt;matplotlib.text.Text at 0x943f208&gt;
 </pre>
 </div>
 
@@ -19557,7 +19557,7 @@ In&nbsp;[31]:
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.text.Text at 0x9e93ac8&gt;
+&lt;matplotlib.text.Text at 0x9e3e7f0&gt;
 </pre>
 </div>
 
@@ -20024,10 +20024,11 @@ In&nbsp;[33]:
 <span class="n">zMesh3</span><span class="p">[</span><span class="n">ref3</span><span class="p">]</span> <span class="o">=</span> <span class="n">nan</span>
 
 <span class="n">interpDf</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">zMesh3</span><span class="p">)</span>
-<span class="n">interpDf</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">xVec3</span>
-<span class="n">interpDf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;width&#39;</span>
-<span class="n">interpDf</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">yVec3</span>
-<span class="n">interpDf</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;ratio&#39;</span>
+<span class="n">interpDf</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="n">xVec3</span>
+<span class="n">interpDf</span><span class="o">.</span><span class="n">columns</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;width&#39;</span>
+<span class="n">interpDf</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="n">yVec3</span>
+<span class="n">interpDf</span><span class="o">.</span><span class="n">index</span><span class="o">.</span><span class="n">name</span> <span class="o">=</span> <span class="s">&#39;ratio&#39;</span>
+
 
 <span class="n">display_html</span><span class="p">(</span><span class="n">interpDf</span><span class="p">)</span>
 </pre></div>
@@ -20047,23 +20048,23 @@ In&nbsp;[33]:
 <table border="1" class="dataframe">
   <thead>
     <tr style="text-align: right;">
-      <th>ratio</th>
-      <th>0.554</th>
-      <th>0.577</th>
-      <th>0.601</th>
-      <th>0.624</th>
-      <th>0.648</th>
-      <th>0.671</th>
+      <th>width</th>
+      <th>2.8</th>
+      <th>2.937</th>
+      <th>3.074</th>
+      <th>3.211</th>
+      <th>3.347</th>
+      <th>3.484</th>
       <th>...</th>
-      <th>0.883</th>
-      <th>0.906</th>
-      <th>0.93</th>
-      <th>0.953</th>
-      <th>0.977</th>
-      <th>1.0</th>
+      <th>4.716</th>
+      <th>4.853</th>
+      <th>4.989</th>
+      <th>5.126</th>
+      <th>5.263</th>
+      <th>5.4</th>
     </tr>
     <tr>
-      <th>width</th>
+      <th>ratio</th>
       <th></th>
       <th></th>
       <th></th>
@@ -20081,7 +20082,7 @@ In&nbsp;[33]:
   </thead>
   <tbody>
     <tr>
-      <th>2.800</th>
+      <th>0.554</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20097,7 +20098,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>2.937</th>
+      <th>0.577</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20113,7 +20114,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>3.074</th>
+      <th>0.601</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20129,7 +20130,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>3.211</th>
+      <th>0.624</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20145,7 +20146,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>3.347</th>
+      <th>0.648</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td> 0.945501</td>
@@ -20161,7 +20162,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>3.484</th>
+      <th>0.671</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td> 0.943579</td>
@@ -20177,7 +20178,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>3.621</th>
+      <th>0.695</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td> 0.941805</td>
@@ -20193,7 +20194,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>3.758</th>
+      <th>0.718</th>
       <td>NaN</td>
       <td> 0.933554</td>
       <td> 0.940307</td>
@@ -20209,7 +20210,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>3.895</th>
+      <th>0.742</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td> 0.938937</td>
@@ -20225,7 +20226,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>4.032</th>
+      <th>0.765</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td> 0.937793</td>
@@ -20241,7 +20242,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>4.168</th>
+      <th>0.789</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td> 0.936761</td>
@@ -20257,7 +20258,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>4.305</th>
+      <th>0.812</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td> 0.935915</td>
@@ -20273,7 +20274,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>4.442</th>
+      <th>0.836</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td> 0.935168</td>
@@ -20289,7 +20290,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>4.579</th>
+      <th>0.859</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20305,7 +20306,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>4.716</th>
+      <th>0.883</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20321,7 +20322,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>4.853</th>
+      <th>0.906</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20337,7 +20338,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>4.989</th>
+      <th>0.930</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20353,7 +20354,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>5.126</th>
+      <th>0.953</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20369,7 +20370,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>5.263</th>
+      <th>0.977</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td>      NaN</td>
@@ -20385,7 +20386,7 @@ In&nbsp;[33]:
       <td>NaN</td>
     </tr>
     <tr>
-      <th>5.400</th>
+      <th>1.000</th>
       <td>NaN</td>
       <td>      NaN</td>
       <td> 0.933045</td>
@@ -20431,7 +20432,7 @@ In&nbsp;[34]:
     <div class="input_area">
 <div class="highlight"><pre><span class="n">interpolationTableFilepath</span> <span class="o">=</span> <span class="n">modelOutputDirectory</span><span class="o">+</span><span class="s">&quot;/interpolation-table.csv&quot;</span>
 
-<span class="n">interpDf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">interpolationTableFilepath</span><span class="p">,</span> <span class="n">index_label</span> <span class="o">=</span> <span class="s">&#39;width | ratio&#39;</span><span class="p">)</span>
+<span class="n">interpDf</span><span class="o">.</span><span class="n">to_csv</span><span class="p">(</span><span class="n">interpolationTableFilepath</span><span class="p">,</span> <span class="n">index_label</span> <span class="o">=</span> <span class="s">&#39;ratio | width&#39;</span><span class="p">)</span>
 </pre></div>
 
 </div>
