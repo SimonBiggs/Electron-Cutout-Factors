@@ -1,4 +1,4 @@
-Electron-Cutout-Factors
+Electron Cutout Factors
 =======================
 
 For the modelling of electron cut-out factors in Medical Physics.
