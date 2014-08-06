@@ -23,6 +23,12 @@ Place input tables in csv format for each applicator and energy within the direc
 
     input/data/
 
+Place a table of requested cutouts within the directory (the filename must match the data set):
+
+    input/requested-cutouts/
+    
+
+
 
 
 Execute:
@@ -36,4 +42,7 @@ Reviewing the results
 
 The output data and respective reports can be found within:
 
-    output/YYYYmmdd_HHMMSS
+    output/YYYYmmdd_HHMMSS/
+    
+
+This data is divided into folders according to the `input/data/` filename. Within each output folder a report of the code is given along with an interpolation table and the requested cut-out data.
