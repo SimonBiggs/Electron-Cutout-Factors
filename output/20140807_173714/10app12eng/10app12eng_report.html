@@ -1680,7 +1680,7 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h1 id="Electron-cutout-factor-model-notebook">Electron cutout factor model notebook<a class="anchor-link" href="#Electron-cutout-factor-model-notebook">&#182;</a></h1>
+<h1 id="Electron-cutout-factor-model-report">Electron cutout factor model report<a class="anchor-link" href="#Electron-cutout-factor-model-report">&#182;</a></h1>
 </div>
 </div>
 </div>
@@ -1690,7 +1690,79 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Description goes here</p>
+<p>This model allows for the prediction of electron cut-out factors from previously measured cutouts. Input data is retrieved from csv files saved at <code>input/data/*.csv</code>. These measured cutout factors are then modelled using a smoothing spline. A region is defined which is considered to have sufficent cutout data for prediction. Over this valid region the provided data is used to predict an overall uncertainty for prediction. Finally the results are output to user friendly csv files.</p>
+<p>This is a print out of the code that was run in order to produce the outputs given within this directory.</p>
+<h3 id="code-overview">Code Overview</h3>
+<p>The code is broken up into three major sections, <a href="#Code-initialisation">code initialisation</a>, <a href="#Primary-computations">primary computations</a>, and finally <a href="#Output-data-to-files">output data to files</a>. Below is an overview of these sections.</p>
+<h4 id="-code-initialisation-code-initialisation-"><a href="#Code-initialisation">Code initialisation</a></h4>
+<ul>
+<li><a href="#Required-packages">Required packages</a> | Loading of the required python packages<ul>
+<li><a href="#Loading-packages">Loading packages</a></li>
+<li><a href="#Package-options">Package options</a></li>
+</ul>
+</li>
+<li><a href="#User-parameters">User parameters</a> | Importing the user parameters from <code>/input/parameters.csv</code><ul>
+<li><a href="#Load">Load</a></li>
+<li><a href="#Diplay">Display</a></li>
+</ul>
+</li>
+<li><a href="#Input-output-paths-and-directories">Input output paths and directories</a> | Defining the locations where files are loaded from and saved to<ul>
+<li><a href="#Input">Input</a></li>
+<li><a href="#Output">Output</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="-primary-computations-primary-computations-"><a href="#Primary-computations">Primary computations</a></h4>
+<ul>
+<li><a href="#The-cutout-data">The cutout data</a> |<ul>
+<li><a href="#Load-data">Load data</a></li>
+<li><a href="#Table-of-the-received-data">Table of the received data</a></li>
+<li><a href="#Figure-of-the-received-data">Figure of the received data</a></li>
+</ul>
+</li>
+<li><a href="#Creating-the-fit">Creating the fit</a> |<ul>
+<li><a href="#Spline">Spline</a></li>
+<li><a href="#Mirrored-form">Mirrored form</a></li>
+<li><a href="#Width-and-aspect-ratio-form">Width and aspect ratio form</a></li>
+</ul>
+</li>
+<li><a href="#Valid-region-definitions">Valid region definitions</a> | <ul>
+<li><a href="#Angle-gap">Angle gap</a></li>
+<li><a href="#Fit-give">Fit give</a></li>
+</ul>
+</li>
+<li><a href="#Residuals">Residuals</a> |<ul>
+<li><a href="#Residuals-standard-deviation">Residuals standard deviation</a></li>
+<li><a href="#Residuals-histogram">Residuals histogram</a></li>
+<li><a href="#Residuals-scatter-plot">Residuals scatter plot</a></li>
+<li><a href="#Residuals-table">Residuals table</a></li>
+</ul>
+</li>
+<li><a href="#Prediction-uncertainty">Prediction uncertainty</a> |<ul>
+<li><a href="#Remove-and-recalculate-fit">Remove and recalculate fit</a></li>
+<li><a href="#User-defined-thresholds">User defined thresholds</a></li>
+<li><a href="#Prediction-differences-table">Prediction differences table</a></li>
+<li><a href="#Standard-deviation-of-valid-prediction-differences">Standard deviation of valid prediction differences</a></li>
+<li><a href="#Histogram-of-valid-prediction-differences">Histogram of valid prediction differences</a></li>
+</ul>
+</li>
+</ul>
+<h4 id="-output-data-to-files-output-data-to-files-"><a href="#Output-data-to-files">Output data to files</a></h4>
+<ul>
+<li><a href="#Interpolation-table">Interpolation table</a> | <ul>
+<li><a href="#User-defined-grid-size">User defined grid size</a></li>
+<li><a href="#Creating-the-interpolation-mesh">Creating the interpolation mesh</a></li>
+<li><a href="#Save-interpolation-table-to-csv">Save interploation table to csv</a></li>
+</ul>
+</li>
+<li><a href="#Requested-cutout-factors">Requested cutout factors</a> | <ul>
+<li><a href="#File-used">File used</a></li>
+<li><a href="#Loading-the-requested-cutouts">Loading the requested cutouts</a></li>
+<li><a href="#Calculating-the-requested-factors">Calculating the requested factors</a></li>
+<li><a href="#Save-requested-factor-outputs-to-csv">Save requested factor outputs to csv</a></li>
+</ul>
+</li>
+</ul>
 </div>
 </div>
 </div>
@@ -1699,7 +1771,36 @@ div#notebook {
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Loading-the-required-packages">Loading the required packages<a class="anchor-link" href="#Loading-the-required-packages">&#182;</a></h2>
+<h2 id="Code-initialisation">Code initialisation<a class="anchor-link" href="#Code-initialisation">&#182;</a></h2>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Required-packages">Required packages<a class="anchor-link" href="#Required-packages">&#182;</a></h3>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Loading of the required python packages</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Loading-packages">Loading packages<a class="anchor-link" href="#Loading-packages">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -1711,7 +1812,36 @@ In&nbsp;[1]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="o">%</span><span class="k">pylab</span> <span class="n">inline</span>
+<div class="highlight"><pre><span class="c"># Imports numpy and matplotlib</span>
+<span class="c"># Libraries similar to MATLAB / Octave</span>
+<span class="o">%</span><span class="k">pylab</span> <span class="n">inline</span>
+
+<span class="c"># For naming files</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+
+<span class="c"># For directory and file control</span>
+<span class="kn">import</span> <span class="nn">os</span>
+
+<span class="c"># To find list of csv files</span>
+<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+
+<span class="c"># To read csv files</span>
+<span class="kn">import</span> <span class="nn">csv</span>
+
+<span class="c"># For the displaying, loading, and saving of tables</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+
+<span class="c"># To display panda tables as html</span>
+<span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">display_html</span>
+
+<span class="c"># The interpolation method employed by this model</span>
+<span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">SmoothBivariateSpline</span>
+
+<span class="c"># Enables 3D plots within matplotlib</span>
+<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+
+<span class="c"># Imports the give and gap threshold functions contained within threshold_functions.py</span>
+<span class="kn">from</span> <span class="nn">threshold_functions</span> <span class="kn">import</span> <span class="o">*</span>
 </pre></div>
 
 </div>
@@ -1735,6 +1865,25 @@ Populating the interactive namespace from numpy and matplotlib
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Package-options">Package options<a class="anchor-link" href="#Package-options">&#182;</a></h4>
+</div>
+</div>
+</div>
+
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
@@ -1742,10 +1891,13 @@ In&nbsp;[2]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">datetime</span>
-<span class="kn">import</span> <span class="nn">os</span>
-<span class="kn">import</span> <span class="nn">csv</span>
-<span class="kn">from</span> <span class="nn">glob</span> <span class="kn">import</span> <span class="n">glob</span>
+<div class="highlight"><pre><span class="c"># Makes the panda tables display no more than 12 columns</span>
+<span class="c"># The html output bugs out without this</span>
+<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_columns</span> <span class="o">=</span> <span class="mi">12</span>
+
+<span class="c"># Makes all figures have a higher resolution</span>
+<span class="c"># Figures were too small without this</span>
+<span class="n">pylab</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;savefig.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">150</span>
 </pre></div>
 
 </div>
@@ -1753,6 +1905,44 @@ In&nbsp;[2]:
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="User-parameters">User parameters<a class="anchor-link" href="#User-parameters">&#182;</a></h3>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Importing the user parameters from <code>/input/parameters.csv</code></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Load">Load<a class="anchor-link" href="#Load">&#182;</a></h4>
+</div>
+</div>
+</div>
+
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
@@ -1760,10 +1950,15 @@ In&nbsp;[3]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">IPython.core.display</span> <span class="kn">import</span> <span class="n">display_html</span>
-<span class="kn">import</span> <span class="nn">pandas</span> <span class="kn">as</span> <span class="nn">pd</span>
+<div class="highlight"><pre><span class="c"># The file path of the paramters.csv file</span>
+<span class="n">parameterFilepath</span> <span class="o">=</span> <span class="s">&quot;../input/parameters.csv&quot;</span>
 
-<span class="n">pd</span><span class="o">.</span><span class="n">options</span><span class="o">.</span><span class="n">display</span><span class="o">.</span><span class="n">max_columns</span> <span class="o">=</span> <span class="mi">12</span>
+<span class="c"># Loads the parameters.csv file</span>
+<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">parameterFilepath</span><span class="p">),</span><span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
+
+<span class="c"># Create a dictionary where the keys are the first column of the csv </span>
+<span class="c"># and the values are the corresponding second column</span>
+<span class="n">parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">))</span>
 </pre></div>
 
 </div>
@@ -1771,6 +1966,25 @@ In&nbsp;[3]:
 </div>
 
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Display">Display<a class="anchor-link" href="#Display">&#182;</a></h4>
+</div>
+</div>
+</div>
+
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
@@ -1778,14 +1992,77 @@ In&nbsp;[4]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">scipy.interpolate</span> <span class="kn">import</span> <span class="n">SmoothBivariateSpline</span>
+<div class="highlight"><pre><span class="c"># Outputs the contents of the dictionary `parameters`</span>
+<span class="n">parameters</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">
+    Out[4]:</div>
+
+
+<div class="output_text output_subarea output_pyout">
+<pre>
+{&apos;giveThreshold&apos;: 0.2,
+ &apos;ratioInterpResolution&apos;: 20.0,
+ &apos;widthInterpResolution&apos;: 20.0,
+ &apos;figureAzim&apos;: -140.0,
+ &apos;gapThreshold&apos;: 130.0,
+ &apos;figureElev&apos;: 30.0}
+</pre>
 </div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Input-output-paths-and-directories">Input output paths and directories<a class="anchor-link" href="#Input-output-paths-and-directories">&#182;</a></h3>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Defining the locations where files are loaded from and saved to</p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Input">Input<a class="anchor-link" href="#Input">&#182;</a></h4>
+</div>
+</div>
+</div>
+
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
@@ -1793,8 +2070,20 @@ In&nbsp;[5]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="kn">as</span> <span class="nn">plt</span>
-<span class="kn">from</span> <span class="nn">mpl_toolkits.mplot3d</span> <span class="kn">import</span> <span class="n">Axes3D</span>
+<div class="highlight"><pre><span class="c"># If this notebook was produced as expected using the `runmodel.py` script</span>
+<span class="c"># then the input filepath is stored in the processes environmental variable</span>
+<span class="n">inputDataFilepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;INPUTDATAFILEPATH&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c"># If this notebook was not produced in the expected manner a dummy filepath is used</span>
+<span class="c"># This will print a warning</span>
+<span class="k">if</span> <span class="n">inputDataFilepath</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">inputDataFilelist</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s">&quot;../input/data/*.csv&quot;</span><span class="p">)</span>
+    <span class="n">inputDataFilepath</span> <span class="o">=</span> <span class="n">inputDataFilelist</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Warning: input filepath was not retrievable&quot;</span><span class="p">)</span>
+
+<span class="c"># Store the base filename that has been used to run this script</span>
+<span class="n">inputDataFilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">inputDataFilepath</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
 </pre></div>
 
 </div>
@@ -1809,25 +2098,30 @@ In&nbsp;[6]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">pylab</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s">&#39;savefig.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">150</span> 
+<div class="highlight"><pre><span class="c"># Display the input file path</span>
+<span class="n">inputDataFilepath</span>
 </pre></div>
 
 </div>
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt output_prompt">
+    Out[6]:</div>
+
+
+<div class="output_text output_subarea output_pyout">
+<pre>
+&apos;../input/data\\10app12eng.csv&apos;
+</pre>
 </div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">
-In&nbsp;[7]:
-</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class="highlight"><pre><span class="kn">from</span> <span class="nn">userfunctions</span> <span class="kn">import</span> <span class="o">*</span>
-</pre></div>
 
 </div>
+
 </div>
 </div>
 
@@ -1837,7 +2131,16 @@ In&nbsp;[7]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Load-user-parameters-and-report">Load user parameters and report<a class="anchor-link" href="#Load-user-parameters-and-report">&#182;</a></h2>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Output">Output<a class="anchor-link" href="#Output">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -1845,16 +2148,42 @@ In&nbsp;[7]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
+In&nbsp;[7]:
+</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class="highlight"><pre><span class="c"># If this notebook was produced as expected using the `runmodel.py` script</span>
+<span class="c"># then the model output directory is stored in the processes environmental variable</span>
+<span class="n">modelOutputDirectory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;MODELOUTPUTDIRECTORY&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+
+<span class="c"># If this notebook was not produced in the expected manner a dummy directory is used</span>
+<span class="c"># This will print a warning</span>
+<span class="k">if</span> <span class="n">modelOutputDirectory</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
+    <span class="n">stamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%Y%m</span><span class="si">%d</span><span class="s">_%H%M%S&quot;</span><span class="p">)</span>
+    <span class="n">inputDataFilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">inputDataFilepath</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
+    <span class="n">modelOutputDirectory</span> <span class="o">=</span> <span class="s">&quot;../output/&quot;</span><span class="o">+</span><span class="n">stamp</span><span class="o">+</span><span class="s">&quot;/&quot;</span><span class="o">+</span><span class="n">inputDataFilename</span>
+    
+    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Warning: model output directory was not retrievable&quot;</span><span class="p">)</span>
+
+<span class="c"># Creates the required directory if it does not already exist</span>
+<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">modelOutputDirectory</span><span class="p">):</span>
+    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">modelOutputDirectory</span><span class="p">)</span>
+</pre></div>
+
+</div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">
 In&nbsp;[8]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">parameterFilepath</span> <span class="o">=</span> <span class="s">&quot;../input/parameters.csv&quot;</span>
-
-<span class="n">reader</span> <span class="o">=</span> <span class="n">csv</span><span class="o">.</span><span class="n">reader</span><span class="p">(</span><span class="nb">open</span><span class="p">(</span><span class="n">parameterFilepath</span><span class="p">),</span><span class="n">delimiter</span><span class="o">=</span><span class="s">&#39;,&#39;</span><span class="p">)</span>
-<span class="n">parameters</span> <span class="o">=</span> <span class="nb">dict</span><span class="p">(([</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span><span class="nb">float</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">])]</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="n">reader</span><span class="p">))</span>
-
-<span class="n">parameters</span>
+<div class="highlight"><pre><span class="c"># Display the model output directory</span>
+<span class="n">modelOutputDirectory</span>
 </pre></div>
 
 </div>
@@ -1871,12 +2200,7 @@ In&nbsp;[8]:
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-{&apos;widthInterpResolution&apos;: 20.0,
- &apos;figureElev&apos;: 30.0,
- &apos;gapThreshold&apos;: 130.0,
- &apos;giveThreshold&apos;: 0.2,
- &apos;figureAzim&apos;: -140.0,
- &apos;ratioInterpResolution&apos;: 20.0}
+&apos;../output/20140807_173714/10app12eng&apos;
 </pre>
 </div>
 
@@ -1891,7 +2215,36 @@ In&nbsp;[8]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Retrieving/defining-input-file-path">Retrieving/defining input file path<a class="anchor-link" href="#Retrieving/defining-input-file-path">&#182;</a></h2>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Primary-computations">Primary computations<a class="anchor-link" href="#Primary-computations">&#182;</a></h2>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="The-cutout-data">The cutout data<a class="anchor-link" href="#The-cutout-data">&#182;</a></h3>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Load-data">Load data<a class="anchor-link" href="#Load-data">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -1903,123 +2256,23 @@ In&nbsp;[9]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">inputDataFilepath</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;INPUTDATAFILEPATH&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
+<div class="highlight"><pre><span class="c"># Use pandas to load the csv file</span>
+<span class="n">cutoutData</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">inputDataFilepath</span><span class="p">)</span>
 
-<span class="k">if</span> <span class="n">inputDataFilepath</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-    <span class="n">inputDataFilelist</span> <span class="o">=</span> <span class="n">glob</span><span class="p">(</span><span class="s">&quot;../input/data/*.csv&quot;</span><span class="p">)</span>
-    <span class="n">inputDataFilepath</span> <span class="o">=</span> <span class="n">inputDataFilelist</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
-    
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Warning: input filepath was not retrievable&quot;</span><span class="p">)</span>
-    
-<span class="n">inputDataFilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">inputDataFilepath</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Retrieving/defining-output-directory">Retrieving/defining output directory<a class="anchor-link" href="#Retrieving/defining-output-directory">&#182;</a></h2>
-</div>
-</div>
-</div>
-
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">
-In&nbsp;[10]:
-</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class="highlight"><pre><span class="n">modelOutputDirectory</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="o">.</span><span class="n">get</span><span class="p">(</span><span class="s">&#39;MODELOUTPUTDIRECTORY&#39;</span><span class="p">,</span> <span class="o">-</span><span class="mi">1</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="n">modelOutputDirectory</span> <span class="o">==</span> <span class="o">-</span><span class="mi">1</span><span class="p">:</span>
-    <span class="n">stamp</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">now</span><span class="p">()</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%Y%m</span><span class="si">%d</span><span class="s">_%H%M%S&quot;</span><span class="p">)</span>
-    <span class="n">inputDataFilename</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">basename</span><span class="p">(</span><span class="n">inputDataFilepath</span><span class="p">)[</span><span class="mi">0</span><span class="p">:</span><span class="o">-</span><span class="mi">4</span><span class="p">]</span>
-    <span class="n">modelOutputDirectory</span> <span class="o">=</span> <span class="s">&quot;../output/&quot;</span><span class="o">+</span><span class="n">stamp</span><span class="o">+</span><span class="s">&quot;/&quot;</span><span class="o">+</span><span class="n">inputDataFilename</span>
-    
-    <span class="k">print</span><span class="p">(</span><span class="s">&quot;Warning: model output directory was not retrievable&quot;</span><span class="p">)</span>
-
-<span class="k">if</span> <span class="ow">not</span> <span class="n">os</span><span class="o">.</span><span class="n">path</span><span class="o">.</span><span class="n">exists</span><span class="p">(</span><span class="n">modelOutputDirectory</span><span class="p">):</span>
-    <span class="n">os</span><span class="o">.</span><span class="n">makedirs</span><span class="p">(</span><span class="n">modelOutputDirectory</span><span class="p">)</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Load-cutout-data">Load cutout data<a class="anchor-link" href="#Load-cutout-data">&#182;</a></h2>
-</div>
-</div>
-</div>
-
-<div class="cell border-box-sizing text_cell rendered">
-<div class="prompt input_prompt">
-</div>
-<div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Data-filepath-used">Data filepath used<a class="anchor-link" href="#Data-filepath-used">&#182;</a></h3>
-</div>
-</div>
-</div>
-
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">
-In&nbsp;[11]:
-</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class="highlight"><pre><span class="n">inputDataFilepath</span>
-</pre></div>
-
-</div>
-</div>
-</div>
-
-<div class="output_wrapper">
-<div class="output">
-
-
-<div class="output_area"><div class="prompt output_prompt">
-    Out[11]:</div>
-
-
-<div class="output_text output_subarea output_pyout">
-<pre>
-&apos;../input/data\\10app12eng.csv&apos;
-</pre>
-</div>
-
-</div>
-
-</div>
-</div>
-
-</div>
-<div class="cell border-box-sizing code_cell rendered">
-<div class="input">
-<div class="prompt input_prompt">
-In&nbsp;[12]:
-</div>
-<div class="inner_cell">
-    <div class="input_area">
-<div class="highlight"><pre><span class="n">cutoutData</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">read_csv</span><span class="p">(</span><span class="n">inputDataFilepath</span><span class="p">)</span>
+<span class="c"># Define width, length, and factor as the csv columns</span>
+<span class="c"># which had that corresponding header</span>
 <span class="n">width</span> <span class="o">=</span> <span class="n">cutoutData</span><span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 <span class="n">length</span> <span class="o">=</span> <span class="n">cutoutData</span><span class="p">[</span><span class="s">&#39;length&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 <span class="n">factor</span> <span class="o">=</span> <span class="n">cutoutData</span><span class="p">[</span><span class="s">&#39;factor&#39;</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
 
+<span class="c"># Swap width and length values if order was mistaken</span>
+<span class="n">swap</span> <span class="o">=</span> <span class="n">width</span> <span class="o">&gt;</span> <span class="n">length</span>
+
+<span class="n">store</span> <span class="o">=</span> <span class="n">width</span><span class="p">[</span><span class="n">swap</span><span class="p">]</span>
+<span class="n">width</span><span class="p">[</span><span class="n">swap</span><span class="p">]</span> <span class="o">=</span> <span class="n">length</span><span class="p">[</span><span class="n">swap</span><span class="p">]</span>
+<span class="n">length</span><span class="p">[</span><span class="n">swap</span><span class="p">]</span> <span class="o">=</span> <span class="n">store</span>
+
+<span class="c"># Define the cutout aspect ratio</span>
 <span class="n">ratio</span> <span class="o">=</span> <span class="n">width</span><span class="o">/</span><span class="n">length</span>
 </pre></div>
 
@@ -2033,7 +2286,16 @@ In&nbsp;[12]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="The-loaded-data">The loaded data<a class="anchor-link" href="#The-loaded-data">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Table-of-the-received-data">Table of the received data<a class="anchor-link" href="#Table-of-the-received-data">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -2041,12 +2303,18 @@ In&nbsp;[12]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[13]:
+In&nbsp;[10]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">transpose</span><span class="p">([</span><span class="n">width</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">factor</span><span class="p">]))</span>
+<div class="highlight"><pre><span class="c"># Create a pandas table using the width, length, and factor variables</span>
+<span class="c"># for the purpose of display</span>
+<span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">transpose</span><span class="p">([</span><span class="n">width</span><span class="p">,</span> <span class="n">length</span><span class="p">,</span> <span class="n">factor</span><span class="p">]))</span>
+
+<span class="c"># Label the columns</span>
 <span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;width&#39;</span><span class="p">,</span> <span class="s">&#39;length&#39;</span><span class="p">,</span> <span class="s">&#39;factor&#39;</span><span class="p">]</span>
+
+<span class="c"># Display the table in html format</span>
 <span class="n">display_html</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 
@@ -2172,7 +2440,16 @@ In&nbsp;[13]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Plot-of-the-data-provided">Plot of the data provided<a class="anchor-link" href="#Plot-of-the-data-provided">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Figure-of-the-received-data">Figure of the received data<a class="anchor-link" href="#Figure-of-the-received-data">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -2180,29 +2457,44 @@ In&nbsp;[13]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[14]:
+In&nbsp;[11]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<div class="highlight"><pre><span class="c"># Create a figure object</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+
+<span class="c"># Add a 3D axis</span>
 <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">,</span> <span class="n">projection</span><span class="o">=</span><span class="s">&#39;3d&#39;</span><span class="p">)</span>
 
+<span class="c"># Calculate the z axis limits</span>
 <span class="n">bot</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amin</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span> <span class="o">-</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ptp</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span>
 <span class="n">top</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">amax</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span> <span class="o">+</span> <span class="mf">0.1</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">ptp</span><span class="p">(</span><span class="n">factor</span><span class="p">)</span>
 
+<span class="c"># Create a red scatter plot on the bottom plane of the figure</span>
+<span class="c"># for visual reference</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="n">ratio</span><span class="p">,</span><span class="n">bot</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;r&#39;</span><span class="p">,</span><span class="n">s</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
 
+<span class="c"># Draw black lines connecting each data point and the bottom plane</span>
+<span class="c"># for visual reference</span>
 <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">factor</span><span class="p">)):</span>
     <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">([</span><span class="n">width</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">width</span><span class="p">[</span><span class="n">i</span><span class="p">]],[</span><span class="n">ratio</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">ratio</span><span class="p">[</span><span class="n">i</span><span class="p">]],[</span><span class="n">factor</span><span class="p">[</span><span class="n">i</span><span class="p">],</span><span class="n">bot</span><span class="p">],</span><span class="s">&#39;k&#39;</span><span class="p">,</span><span class="n">alpha</span><span class="o">=</span><span class="mf">0.5</span><span class="p">)</span>
-    
+
+<span class="c"># Scatter plot the 3D data that has been provided</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="n">ratio</span><span class="p">,</span><span class="n">factor</span><span class="p">,</span><span class="n">c</span><span class="o">=</span><span class="s">&#39;b&#39;</span><span class="p">)</span>
+
+<span class="c"># Define the figure labels</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s">&#39;Width&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s">&#39;Ratio&#39;</span><span class="p">)</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_zlabel</span><span class="p">(</span><span class="s">&#39;Factor&#39;</span><span class="p">)</span>
 
+<span class="c"># Define the figure title</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_title</span><span class="p">(</span><span class="s">&#39;Provided data&#39;</span><span class="p">)</span>
 
+<span class="c"># Enforce the z axis limits previously calculated</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">set_zlim</span><span class="p">(</span><span class="n">bot</span><span class="p">,</span><span class="n">top</span><span class="p">)</span>
+
+<span class="c"># Adjust the viewing angle of the figure to that requested in `parameters.csv`</span>
 <span class="n">ax</span><span class="o">.</span><span class="n">view_init</span><span class="p">(</span><span class="n">elev</span><span class="o">=</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;figureElev&#39;</span><span class="p">],</span> <span class="n">azim</span><span class="o">=</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;figureAzim&#39;</span><span class="p">])</span>
 </pre></div>
 
@@ -3809,7 +4101,26 @@ dCvYl7j7LgAAAABJRU5ErkJggg==
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Spline-fitting">Spline fitting<a class="anchor-link" href="#Spline-fitting">&#182;</a></h2>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Creating-the-fit">Creating the fit<a class="anchor-link" href="#Creating-the-fit">&#182;</a></h3>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Spline">Spline<a class="anchor-link" href="#Spline">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -3826,12 +4137,17 @@ dCvYl7j7LgAAAABJRU5ErkJggg==
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[15]:
+In&nbsp;[12]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">widthMirrored</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="n">width</span><span class="p">)</span>
+<div class="highlight"><pre><span class="c"># Duplicate the width data</span>
+<span class="n">widthMirrored</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">width</span><span class="p">,</span><span class="n">width</span><span class="p">)</span>
+
+<span class="c"># Mirror the ratio data and take the base 2 log</span>
 <span class="n">ratioLogMirrored</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">log2</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">width</span><span class="o">/</span><span class="n">length</span><span class="p">,</span><span class="n">length</span><span class="o">/</span><span class="n">width</span><span class="p">))</span>
+
+<span class="c"># Duplicate the factor data</span>
 <span class="n">factorMirrored</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">factor</span><span class="p">,</span><span class="n">factor</span><span class="p">)</span>
 </pre></div>
 
@@ -3852,11 +4168,12 @@ In&nbsp;[15]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[16]:
+In&nbsp;[13]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">splineFit</span> <span class="o">=</span> <span class="n">SmoothBivariateSpline</span><span class="p">(</span><span class="n">widthMirrored</span><span class="p">,</span><span class="n">ratioLogMirrored</span><span class="p">,</span><span class="n">factorMirrored</span><span class="p">)</span>
+<div class="highlight"><pre><span class="c"># Compute the smoothed bivariate spline using the mirrored data</span>
+<span class="n">splineFit</span> <span class="o">=</span> <span class="n">SmoothBivariateSpline</span><span class="p">(</span><span class="n">widthMirrored</span><span class="p">,</span><span class="n">ratioLogMirrored</span><span class="p">,</span><span class="n">factorMirrored</span><span class="p">)</span>
 </pre></div>
 
 </div>
@@ -3869,7 +4186,16 @@ In&nbsp;[16]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Plotting-the-spline-fit-in-its-natural-form">Plotting the spline fit in its natural form<a class="anchor-link" href="#Plotting-the-spline-fit-in-its-natural-form">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Mirrored-form">Mirrored form<a class="anchor-link" href="#Mirrored-form">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -3886,7 +4212,7 @@ In&nbsp;[16]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[17]:
+In&nbsp;[14]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -3911,7 +4237,7 @@ In&nbsp;[17]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[18]:
+In&nbsp;[15]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -3951,12 +4277,12 @@ In&nbsp;[18]:
 
 
 <div class="output_area"><div class="prompt output_prompt">
-    Out[18]:</div>
+    Out[15]:</div>
 
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.legend.Legend at 0x93b9fd0&gt;
+&lt;matplotlib.legend.Legend at 0x93faf98&gt;
 </pre>
 </div>
 
@@ -5797,7 +6123,16 @@ IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiLx/R/fRhCFwZViOwAAAABJRU5ErkJggg==
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Plotting-the-spline-fit-in-the-useful-form">Plotting the spline fit in the useful form<a class="anchor-link" href="#Plotting-the-spline-fit-in-the-useful-form">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Width-and-aspect-ratio-form">Width and aspect ratio form<a class="anchor-link" href="#Width-and-aspect-ratio-form">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -5814,7 +6149,7 @@ IiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiIiLx/R/fRhCFwZViOwAAAABJRU5ErkJggg==
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[19]:
+In&nbsp;[16]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -5839,7 +6174,7 @@ In&nbsp;[19]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[20]:
+In&nbsp;[17]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -5880,12 +6215,12 @@ In&nbsp;[20]:
 
 
 <div class="output_area"><div class="prompt output_prompt">
-    Out[20]:</div>
+    Out[17]:</div>
 
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.legend.Legend at 0x9222550&gt;
+&lt;matplotlib.legend.Legend at 0x8db6898&gt;
 </pre>
 </div>
 
@@ -7598,7 +7933,16 @@ B6ripJjlOACrAAAAAElFTkSuQmCC
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Contour-plots-of-the-threshold-parameters">Contour plots of the threshold parameters<a class="anchor-link" href="#Contour-plots-of-the-threshold-parameters">&#182;</a></h2>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Valid-region-definitions">Valid region definitions<a class="anchor-link" href="#Valid-region-definitions">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -7617,7 +7961,7 @@ B6ripJjlOACrAAAAAElFTkSuQmCC
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Angle-gap">Angle gap<a class="anchor-link" href="#Angle-gap">&#182;</a></h3>
+<h4 id="Angle-gap">Angle gap<a class="anchor-link" href="#Angle-gap">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -7625,7 +7969,7 @@ B6ripJjlOACrAAAAAElFTkSuQmCC
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[21]:
+In&nbsp;[18]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -7656,12 +8000,12 @@ In&nbsp;[21]:
 
 
 <div class="output_area"><div class="prompt output_prompt">
-    Out[21]:</div>
+    Out[18]:</div>
 
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.text.Text at 0x8fc3400&gt;
+&lt;matplotlib.text.Text at 0x9004f98&gt;
 </pre>
 </div>
 
@@ -10415,7 +10759,16 @@ hBBCiN3l/wM3lOodzXYa1wAAAABJRU5ErkJggg==
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Fit-Give">Fit Give<a class="anchor-link" href="#Fit-Give">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Fit-give">Fit give<a class="anchor-link" href="#Fit-give">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -10423,7 +10776,7 @@ hBBCiN3l/wM3lOodzXYa1wAAAABJRU5ErkJggg==
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[22]:
+In&nbsp;[19]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -10454,12 +10807,12 @@ In&nbsp;[22]:
 
 
 <div class="output_area"><div class="prompt output_prompt">
-    Out[22]:</div>
+    Out[19]:</div>
 
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.text.Text at 0x9db8a20&gt;
+&lt;matplotlib.text.Text at 0x9a390f0&gt;
 </pre>
 </div>
 
@@ -13144,7 +13497,16 @@ MAzDMAzDuDv+fybRUDGqffhXAAAAAElFTkSuQmCC
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Residuals">Residuals<a class="anchor-link" href="#Residuals">&#182;</a></h2>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Residuals">Residuals<a class="anchor-link" href="#Residuals">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -13163,7 +13525,7 @@ MAzDMAzDuDv+fybRUDGqffhXAAAAAElFTkSuQmCC
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Standard-deviation-of-the-residuals">Standard deviation of the residuals<a class="anchor-link" href="#Standard-deviation-of-the-residuals">&#182;</a></h3>
+<h4 id="Residuals-standard-deviation">Residuals standard deviation<a class="anchor-link" href="#Residuals-standard-deviation">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -13171,7 +13533,7 @@ MAzDMAzDuDv+fybRUDGqffhXAAAAAElFTkSuQmCC
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[23]:
+In&nbsp;[20]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -13190,7 +13552,7 @@ In&nbsp;[23]:
 
 
 <div class="output_area"><div class="prompt output_prompt">
-    Out[23]:</div>
+    Out[20]:</div>
 
 
 <div class="output_text output_subarea output_pyout">
@@ -13210,7 +13572,16 @@ In&nbsp;[23]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Histogram-of-residuals">Histogram of residuals<a class="anchor-link" href="#Histogram-of-residuals">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Residuals-histogram">Residuals histogram<a class="anchor-link" href="#Residuals-histogram">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -13218,7 +13589,7 @@ In&nbsp;[23]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[24]:
+In&nbsp;[21]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -13243,12 +13614,12 @@ In&nbsp;[24]:
 
 
 <div class="output_area"><div class="prompt output_prompt">
-    Out[24]:</div>
+    Out[21]:</div>
 
 
 <div class="output_text output_subarea output_pyout">
 <pre>
-&lt;matplotlib.text.Text at 0x9ce0438&gt;
+&lt;matplotlib.text.Text at 0xa19deb8&gt;
 </pre>
 </div>
 
@@ -13603,7 +13974,16 @@ SZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkaUv4f91GL0kcZd07AAAAAElFTkSuQmCC
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Scatter-plot-of-residuals">Scatter plot of residuals<a class="anchor-link" href="#Scatter-plot-of-residuals">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Residuals-scatter-plot">Residuals scatter plot<a class="anchor-link" href="#Residuals-scatter-plot">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -13611,7 +13991,7 @@ SZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkSZIkaUv4f91GL0kcZd07AAAAAElFTkSuQmCC
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[25]:
+In&nbsp;[22]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -15467,7 +15847,16 @@ SCQSiUQikUgkEolEIpFIJBJJ/vD/qZpUJCuDgywAAAAASUVORK5CYII=
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Table-of-residuals">Table of residuals<a class="anchor-link" href="#Table-of-residuals">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Residuals-table">Residuals table<a class="anchor-link" href="#Residuals-table">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -15475,7 +15864,7 @@ SCQSiUQikUgkEolEIpFIJBJJ/vD/qZpUJCuDgywAAAAASUVORK5CYII=
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[26]:
+In&nbsp;[23]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -15651,7 +16040,16 @@ In&nbsp;[26]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Validation">Validation<a class="anchor-link" href="#Validation">&#182;</a></h2>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Prediction-uncertainty">Prediction uncertainty<a class="anchor-link" href="#Prediction-uncertainty">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -15661,14 +16059,24 @@ In&nbsp;[26]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>Validation tests are achieved by removing the data points in question, creating a new fit, and comparing the predicted value to the measured value.</p>
+<p>Prediction uncertainty tests are achieved by removing the data points in question, creating a new fit without that particular data point, and then comparing the newly predicted value to the provided measured value.</p>
 </div>
 </div>
 </div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Remove-and-recalculate-fit">Remove and recalculate fit<a class="anchor-link" href="#Remove-and-recalculate-fit">&#182;</a></h4>
+</div>
+</div>
+</div>
+
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[27]:
+In&nbsp;[24]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -15708,7 +16116,16 @@ In&nbsp;[27]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="User-defined-prediction-tolerances">User defined prediction tolerances<a class="anchor-link" href="#User-defined-prediction-tolerances">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="User-defined-thresholds">User defined thresholds<a class="anchor-link" href="#User-defined-thresholds">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -15725,13 +16142,13 @@ In&nbsp;[27]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[28]:
+In&nbsp;[25]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
 <div class="highlight"><pre><span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">([</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;gapThreshold&#39;</span><span class="p">],</span> <span class="n">parameters</span><span class="p">[</span><span class="s">&#39;giveThreshold&#39;</span><span class="p">]])</span>
-<span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Gap Threshold&#39;</span><span class="p">,</span> <span class="s">&#39;Give Threshold&#39;</span><span class="p">]</span>
-<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Tolerances&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">index</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Gap&#39;</span><span class="p">,</span> <span class="s">&#39;Give&#39;</span><span class="p">]</span>
+<span class="n">df</span><span class="o">.</span><span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Threshold&#39;</span><span class="p">]</span>
 <span class="n">display_html</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
 </pre></div>
 
@@ -15751,16 +16168,16 @@ In&nbsp;[28]:
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Tolerances</th>
+      <th>Threshold</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>Gap Threshold</th>
+      <th>Gap</th>
       <td> 130.0</td>
     </tr>
     <tr>
-      <th>Give Threshold</th>
+      <th>Give</th>
       <td>   0.2</td>
     </tr>
   </tbody>
@@ -15779,7 +16196,16 @@ In&nbsp;[28]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Table-of-predicted-factors">Table of predicted factors<a class="anchor-link" href="#Table-of-predicted-factors">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Prediction-differences-table">Prediction differences table<a class="anchor-link" href="#Prediction-differences-table">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -15796,7 +16222,7 @@ In&nbsp;[28]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[29]:
+In&nbsp;[26]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -16007,7 +16433,16 @@ In&nbsp;[29]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Standard-deviation-of-prediction-differences-which-are-within-the-thresholds">Standard deviation of prediction differences which are within the thresholds<a class="anchor-link" href="#Standard-deviation-of-prediction-differences-which-are-within-the-thresholds">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Standard-deviation-of-valid-prediction-differences">Standard deviation of valid prediction differences<a class="anchor-link" href="#Standard-deviation-of-valid-prediction-differences">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16024,7 +16459,7 @@ In&nbsp;[29]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[30]:
+In&nbsp;[27]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -16069,7 +16504,16 @@ C:\Users\sbiggs\AppData\Local\Continuum\Anaconda3\lib\site-packages\numpy\core\_
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Histogram-of-the-prediction-differences-which-are-within-threshold">Histogram of the prediction differences which are within threshold<a class="anchor-link" href="#Histogram-of-the-prediction-differences-which-are-within-threshold">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Histogram-of-valid-prediction-differences">Histogram of valid prediction differences<a class="anchor-link" href="#Histogram-of-valid-prediction-differences">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16077,7 +16521,7 @@ C:\Users\sbiggs\AppData\Local\Continuum\Anaconda3\lib\site-packages\numpy\core\_
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[31]:
+In&nbsp;[28]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -16117,7 +16561,7 @@ C:\Users\sbiggs\AppData\Local\Continuum\Anaconda3\lib\site-packages\matplotlib\a
 <pre>
 <span class="ansired">---------------------------------------------------------------------------</span>
 <span class="ansired">ValueError</span>                                Traceback (most recent call last)
-<span class="ansigreen">&lt;ipython-input-31-2236e8aafee4&gt;</span> in <span class="ansicyan">&lt;module&gt;</span><span class="ansiblue">()</span>
+<span class="ansigreen">&lt;ipython-input-28-2236e8aafee4&gt;</span> in <span class="ansicyan">&lt;module&gt;</span><span class="ansiblue">()</span>
 <span class="ansigreen">      2</span> ax <span class="ansiyellow">=</span> fig<span class="ansiyellow">.</span>add_subplot<span class="ansiyellow">(</span><span class="ansicyan">111</span><span class="ansiyellow">)</span><span class="ansiyellow"></span>
 <span class="ansigreen">      3</span> <span class="ansiyellow"></span>
 <span class="ansigreen">----&gt; 4</span><span class="ansiyellow"> </span>n<span class="ansiyellow">,</span> bins<span class="ansiyellow">,</span> patches <span class="ansiyellow">=</span> hist<span class="ansiyellow">(</span>difference<span class="ansiyellow">[</span>withinThresholds<span class="ansiyellow">]</span><span class="ansiyellow">)</span><span class="ansiyellow"></span>
@@ -16325,7 +16769,16 @@ LCzQSAAAAABJRU5ErkJggg==
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Output-interpolation-table">Output interpolation table<a class="anchor-link" href="#Output-interpolation-table">&#182;</a></h2>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h2 id="Output-data-to-files">Output data to files<a class="anchor-link" href="#Output-data-to-files">&#182;</a></h2>
 </div>
 </div>
 </div>
@@ -16335,7 +16788,17 @@ LCzQSAAAAABJRU5ErkJggg==
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="User-defined-grid-size">User defined grid size<a class="anchor-link" href="#User-defined-grid-size">&#182;</a></h3>
+<h3 id="Interpolation-table">Interpolation table<a class="anchor-link" href="#Interpolation-table">&#182;</a></h3>
+</div>
+</div>
+</div>
+
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="User-defined-grid-size">User defined grid size<a class="anchor-link" href="#User-defined-grid-size">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16343,7 +16806,7 @@ LCzQSAAAAABJRU5ErkJggg==
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[]:
+In&nbsp;[83]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -16357,13 +16820,56 @@ In&nbsp;[]:
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+<div class="output_html rendered_html output_subarea ">
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Resolutions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>Width</th>
+      <td> 20</td>
+    </tr>
+    <tr>
+      <th>Ratio</th>
+      <td> 20</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Creating-the-interpolation-mesh">Creating the interpolation mesh<a class="anchor-link" href="#Creating-the-interpolation-mesh">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Creating-the-interpolation-mesh">Creating the interpolation mesh<a class="anchor-link" href="#Creating-the-interpolation-mesh">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16371,14 +16877,25 @@ In&nbsp;[]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[]:
+In&nbsp;[84]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
-<div class="highlight"><pre><span class="n">xVec3</span> <span class="o">=</span> <span class="n">around</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="n">width</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">width</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;widthInterpResolution&#39;</span><span class="p">]),</span><span class="n">decimals</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
+<div class="highlight"><pre><span class="c"># ===========================</span>
+<span class="c">#            IDEA</span>
+<span class="c">#</span>
+<span class="c"># This mesh can be more intelligently created. </span>
+<span class="c"># Spread out the steps so that on average each column/row jump has similar cutout effect.</span>
+<span class="c"># Could even make it so that the user input is instead, &quot;diff between rows and cols&quot;. </span>
+<span class="c">#  ^^ This way should work. Use iterative optimisation:</span>
+<span class="c">#     maybe scipy.optimize.minimize of </span>
+<span class="c">#     `mean((max(columnDiffs) - parameterDiff)**2) + mean((max(rowDiffs) - parameterDiff)**2)`</span>
+<span class="c"># ===========================</span>
+
+<span class="n">xVec3</span> <span class="o">=</span> <span class="n">around</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="n">width</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">width</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;widthInterpResolution&#39;</span><span class="p">]),</span><span class="n">decimals</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
 <span class="n">yVec3</span> <span class="o">=</span> <span class="n">around</span><span class="p">(</span><span class="n">linspace</span><span class="p">(</span><span class="n">ratio</span><span class="o">.</span><span class="n">min</span><span class="p">(),</span><span class="n">ratio</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span><span class="n">parameters</span><span class="p">[</span><span class="s">&#39;ratioInterpResolution&#39;</span><span class="p">]),</span><span class="n">decimals</span> <span class="o">=</span> <span class="mi">3</span><span class="p">)</span>
 
-<span class="n">xMesh3</span><span class="p">,</span> <span class="n">yMesh3</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">xVec3</span><span class="p">,</span> <span class="n">yVec3</span><span class="p">)</span>
+<span class="n">xMesh3</span><span class="p">,</span> <span class="n">yMesh3</span> <span class="o">=</span> <span class="n">meshgrid</span><span class="p">(</span><span class="n">xVec3</span><span class="p">,</span> <span class="n">yVec3</span><span class="p">)</span> 
 <span class="n">gapMesh3</span> <span class="o">=</span> <span class="n">angle_gap</span><span class="p">(</span><span class="n">xMesh3</span><span class="p">,</span><span class="n">log2</span><span class="p">(</span><span class="n">yMesh3</span><span class="p">),</span><span class="n">widthMirrored</span><span class="p">,</span><span class="n">ratioLogMirrored</span><span class="p">,</span><span class="mi">1</span><span class="p">,</span><span class="mi">2</span><span class="p">)</span>
 <span class="n">giveMesh3</span> <span class="o">=</span> <span class="n">fit_give</span><span class="p">(</span><span class="n">xMesh3</span><span class="p">,</span><span class="n">log2</span><span class="p">(</span><span class="n">yMesh3</span><span class="p">),</span><span class="n">widthMirrored</span><span class="p">,</span><span class="n">ratioLogMirrored</span><span class="p">,</span><span class="n">factorMirrored</span><span class="p">)</span>
 
@@ -16401,13 +16918,397 @@ In&nbsp;[]:
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+<div class="output_html rendered_html output_subarea ">
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th>width</th>
+      <th>2.8</th>
+      <th>2.934</th>
+      <th>3.068</th>
+      <th>3.203</th>
+      <th>3.337</th>
+      <th>3.471</th>
+      <th>...</th>
+      <th>4.679</th>
+      <th>4.813</th>
+      <th>4.947</th>
+      <th>5.082</th>
+      <th>5.216</th>
+      <th>5.35</th>
+    </tr>
+    <tr>
+      <th>ratio</th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+      <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0.519</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.544</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.569</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.595</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td> 0.983854</td>
+      <td> 0.988103</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.620</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td> 0.980634</td>
+      <td> 0.985033</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.645</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td> 0.972907</td>
+      <td> 0.977792</td>
+      <td> 0.982322</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.671</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td> 0.964943</td>
+      <td> 0.970229</td>
+      <td> 0.975195</td>
+      <td> 0.979846</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.696</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td> 0.962655</td>
+      <td> 0.967975</td>
+      <td> 0.973010</td>
+      <td> 0.977762</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.721</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td> 0.960656</td>
+      <td> 0.966006</td>
+      <td> 0.971101</td>
+      <td> 0.975942</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.747</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td> 0.958854</td>
+      <td> 0.964232</td>
+      <td> 0.969381</td>
+      <td> 0.974302</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.772</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td> 0.957366</td>
+      <td> 0.962765</td>
+      <td> 0.967959</td>
+      <td> 0.972946</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.797</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td> 0.961513</td>
+      <td> 0.966745</td>
+      <td> 0.971788</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.823</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td> 0.960417</td>
+      <td> 0.965683</td>
+      <td> 0.970776</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.848</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td> 0.959546</td>
+      <td> 0.964838</td>
+      <td> 0.969970</td>
+      <td>...</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.873</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td> 0.958839</td>
+      <td> 0.964153</td>
+      <td> 0.969317</td>
+      <td>...</td>
+      <td> 1.001555</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.899</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td> 0.963595</td>
+      <td> 0.968785</td>
+      <td>...</td>
+      <td> 1.001548</td>
+      <td> 1.002781</td>
+      <td> 1.003367</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.924</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td> 0.963196</td>
+      <td> 0.968404</td>
+      <td>...</td>
+      <td> 1.001542</td>
+      <td> 1.002834</td>
+      <td> 1.003479</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.949</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td> 0.962921</td>
+      <td> 0.968142</td>
+      <td>...</td>
+      <td> 1.001539</td>
+      <td> 1.002870</td>
+      <td> 1.003557</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>0.975</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td> 0.962756</td>
+      <td> 0.967985</td>
+      <td>...</td>
+      <td> 1.001536</td>
+      <td> 1.002892</td>
+      <td> 1.003603</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>1.000</th>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>      NaN</td>
+      <td>      NaN</td>
+      <td> 0.962706</td>
+      <td> 0.967937</td>
+      <td>...</td>
+      <td> 1.001536</td>
+      <td> 1.002898</td>
+      <td> 1.003617</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+<p>20 rows × 20 columns</p>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Save-interpolation-table-to-csv">Save interpolation table to csv<a class="anchor-link" href="#Save-interpolation-table-to-csv">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Save-interpolation-table-to-csv">Save interpolation table to csv<a class="anchor-link" href="#Save-interpolation-table-to-csv">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16415,7 +17316,7 @@ In&nbsp;[]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[]:
+In&nbsp;[85]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -16434,7 +17335,16 @@ In&nbsp;[]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Requested-cutout-factors">Requested cutout factors<a class="anchor-link" href="#Requested-cutout-factors">&#182;</a></h2>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Requested-cutout-factors">Requested cutout factors<a class="anchor-link" href="#Requested-cutout-factors">&#182;</a></h3>
 </div>
 </div>
 </div>
@@ -16444,7 +17354,7 @@ In&nbsp;[]:
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="File-used">File used<a class="anchor-link" href="#File-used">&#182;</a></h3>
+<h4 id="File-used">File used<a class="anchor-link" href="#File-used">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16452,7 +17362,7 @@ In&nbsp;[]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[]:
+In&nbsp;[86]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -16469,13 +17379,38 @@ In&nbsp;[]:
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+<div class="output_subarea output_stream output_stdout output_text">
+<pre>
+File found at &apos;../input/requested-cutouts/06app06eng.csv&apos;
+
+</pre>
+</div>
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Loading-the-requested-cutouts">Loading the requested cutouts<a class="anchor-link" href="#Loading-the-requested-cutouts">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Loading-the-requested-cutouts">Loading the requested cutouts<a class="anchor-link" href="#Loading-the-requested-cutouts">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16483,7 +17418,7 @@ In&nbsp;[]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[]:
+In&nbsp;[87]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -16500,13 +17435,59 @@ In&nbsp;[]:
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+<div class="output_html rendered_html output_subarea ">
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>width</th>
+      <th>length</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td> 2.0</td>
+      <td> 4.00000</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td> 3.4</td>
+      <td> 3.88888</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Calculating-the-requested-factors">Calculating the requested factors<a class="anchor-link" href="#Calculating-the-requested-factors">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Calculating-the-requested-factors">Calculating the requested factors<a class="anchor-link" href="#Calculating-the-requested-factors">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16514,7 +17495,7 @@ In&nbsp;[]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[]:
+In&nbsp;[88]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -16540,13 +17521,68 @@ In&nbsp;[]:
 </div>
 </div>
 
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area"><div class="prompt"></div>
+
+<div class="output_html rendered_html output_subarea ">
+<div style="max-height:1000px;max-width:1500px;overflow:auto;">
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>width</th>
+      <th>length</th>
+      <th>gap</th>
+      <th>give</th>
+      <th>factor</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td> 2.0</td>
+      <td> 4.00000</td>
+      <td> 288.688098</td>
+      <td> 0.998935</td>
+      <td>      NaN</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td> 3.4</td>
+      <td> 3.88888</td>
+      <td>  52.090313</td>
+      <td> 0.070832</td>
+      <td> 0.966572</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+</div>
+
+</div>
+
+</div>
+</div>
+
 </div>
 <div class="cell border-box-sizing text_cell rendered">
 <div class="prompt input_prompt">
 </div>
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h3 id="Save-requested-factors-to-csv">Save requested factors to csv<a class="anchor-link" href="#Save-requested-factors-to-csv">&#182;</a></h3>
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Save-requested-factor-outputs-to-csv">Save requested factor outputs to csv<a class="anchor-link" href="#Save-requested-factor-outputs-to-csv">&#182;</a></h4>
 </div>
 </div>
 </div>
@@ -16554,7 +17590,7 @@ In&nbsp;[]:
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">
-In&nbsp;[]:
+In&nbsp;[89]:
 </div>
 <div class="inner_cell">
     <div class="input_area">
@@ -16569,6 +17605,15 @@ In&nbsp;[]:
 </div>
 </div>
 
+</div>
+<div class="cell border-box-sizing text_cell rendered">
+<div class="prompt input_prompt">
+</div>
+<div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p><a href="#Electron-cutout-factor-model-report">Back to top</a></p>
+</div>
+</div>
 </div>
     </div>
   </div>
