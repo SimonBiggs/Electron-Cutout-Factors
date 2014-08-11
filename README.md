@@ -80,7 +80,7 @@ The output data and respective reports can be found within:
 
 This data is divided into folders according to the `input/data/` filename. Within each output folder the following is found:
 
- * `*_report.html` — A printout of the model code that was run for this data set. An example can be found [here](simonbiggs.net/10app06eng_report).
+ * `*_report.html` — A printout of the model code that was run for this data set. An example can be found [here](http://simonbiggs.net/10app06eng_report).
  * `interpolation-table.csv` — A printout of the interpolation table with the width and ratio resolutions defined in `input/parameters.csv`.
  * `predicted-cutouts.csv` — A printout of the predicted cutouts that were requested within the corresponding csv file in `input/requested-cutouts/`. This only appears if cutout factors were requested. A factor is left blank if either the give or the gap parameters were above the threshold values defined in `input/parameters.csv`.
 
