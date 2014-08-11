@@ -10,11 +10,16 @@ Dependencies
 
 On Windows 7 64-bit I installed the following:
 
-* [Anaconda3 64-bit](http://repo.continuum.io/anaconda3/Anaconda3-2.0.1-Windows-x86_64.exe)
-* [pywin32 64-bt](http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/pywin32-219.win-amd64-py3.4.exe/download)
-* [pandoc](https://github.com/jgm/pandoc/releases/download/1.12.4.2/pandoc-1.12.4.2-1-windows.msi)
-* [node.js](http://nodejs.org/dist/v0.10.30/x64/node-v0.10.30-x64.msi)
-* [Google Chrome](https://www.google.com/intl/en-AU/chrome/browser/)
+ * [Anaconda3 64-bit](http://repo.continuum.io/anaconda3/Anaconda3-2.0.1-Windows-x86_64.exe)
+ * [pywin32 64-bt](http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/pywin32-219.win-amd64-py3.4.exe/download)
+ * [pandoc](https://github.com/jgm/pandoc/releases/download/1.12.4.2/pandoc-1.12.4.2-1-windows.msi)
+ * [node.js](http://nodejs.org/dist/v0.10.30/x64/node-v0.10.30-x64.msi)
+
+Recommended Programs
+--------------------
+
+ * [Libre Office](http://donate.libreoffice.org/home/dl/win-x86/4.3.0/en-US/LibreOffice_4.3.0_Win_x86.msi) — Works in a less confusing manner with csv files than Microsoft Excel
+ * [Google Chrome](https://www.google.com/intl/en-AU/chrome/browser/) — The html reports have an improved display in Google Chrome as opposed to Internet Explorer
 
 
 User parameters
