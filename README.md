@@ -22,6 +22,14 @@ Recommended Programs
  * [Google Chrome](https://www.google.com/intl/en-AU/chrome/browser/) — The html reports have an improved display in Google Chrome as opposed to Internet Explorer
 
 
+On Ubuntu 14.04 64-bit I installed the following:
+`sudo apt-get install python3-numpy python3-matplotlib ipython3 ipython ipython3-notebook python3-pandas python3-nose python-pgm python-zmq python3-pip pandoc nodejs libatlas-base-dev gfortran python3-dev build-essential`
+
+`sudo pip3 install runipy`
+`sudo pip3 install scipy`
+
+
+
 User parameters
 ---------------
 
@@ -64,9 +72,13 @@ Note: the filename of these requested cutouts must be the same as the correspond
 Running the model
 -----------------
 
-Execute:
+On Windows Execute:
 
     runmodel.py
+
+On Ubuntu run the following in the main directory (`Electron-Cutout-Factors`):
+
+    `ipython3 ./runmodel.py`
 
 
 
