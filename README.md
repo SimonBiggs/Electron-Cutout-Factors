@@ -81,7 +81,7 @@ On Windows Execute:
 
 On Ubuntu run the following in the main directory (`Electron-Cutout-Factors`):
 
-    `ipython3 ./runmodel.py`
+    ipython3 ./runmodel.py
 
 
 
