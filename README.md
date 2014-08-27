@@ -8,25 +8,28 @@ For the modelling of electron cut-out factors in Radiation Oncology Medical Phys
 Dependencies
 ------------
 
-On Windows 7 64-bit I installed the following:
+On **Ubuntu 14.04 64-bit** I installed the following:
+
+    sudo apt-get install python3-numpy python3-matplotlib ipython3 ipython ipython3-notebook python3-pandas python3-nose python-pgm python-zmq python3-pip pandoc nodejs libatlas-base-dev gfortran python3-dev build-essential
+
+    sudo pip3 install runipy
+    sudo pip3 install scipy
+
+
+On **Windows 7 64-bit** I installed the following:
 
  * [Anaconda3 64-bit](http://repo.continuum.io/anaconda3/Anaconda3-2.0.1-Windows-x86_64.exe)
  * [pywin32 64-bt](http://sourceforge.net/projects/pywin32/files/pywin32/Build%20219/pywin32-219.win-amd64-py3.4.exe/download)
  * [pandoc](https://github.com/jgm/pandoc/releases/download/1.12.4.2/pandoc-1.12.4.2-1-windows.msi)
  * [node.js](http://nodejs.org/dist/v0.10.30/x64/node-v0.10.30-x64.msi)
 
+
 Recommended Programs
 --------------------
 
+
  * [Libre Office](http://donate.libreoffice.org/home/dl/win-x86/4.3.0/en-US/LibreOffice_4.3.0_Win_x86.msi) — Works in a less confusing manner with csv files than Microsoft Excel
  * [Google Chrome](https://www.google.com/intl/en-AU/chrome/browser/) — The html reports have an improved display in Google Chrome as opposed to Internet Explorer
-
-
-On Ubuntu 14.04 64-bit I installed the following:
-`sudo apt-get install python3-numpy python3-matplotlib ipython3 ipython ipython3-notebook python3-pandas python3-nose python-pgm python-zmq python3-pip pandoc nodejs libatlas-base-dev gfortran python3-dev build-essential`
-
-`sudo pip3 install runipy`
-`sudo pip3 install scipy`
 
 
 
@@ -78,7 +81,7 @@ On Windows Execute:
 
 On Ubuntu run the following in the main directory (`Electron-Cutout-Factors`):
 
-    `ipython3 ./runmodel.py`
+    ipython3 ./runmodel.py
 
 
 
