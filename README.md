@@ -1,7 +1,15 @@
 Electron Cutout Factors
 =======================
 
-For the modelling of electron cut-out factors in Radiation Oncology Medical Physics.
+
+A bivariate spline for the modelling of electron cut-out factors in Radiation Oncology Medical Physics. The recorded parameters of length and width are used to model cutout factors against width and shape aspect ratio.
+
+
+At this current point in time not enough evidence has been mounted to declare this method as an improvement over the equivalent field size method. 
+
+For the 6cm6MeV data set both the equivalent field size method and this method produce an uncertainty for prediction of 0.008.
+
+For the 10cm6MeV data set the equivalent field size method has an uncertainty for prediction of 0.005, whereas this method has 0.003. The p-value for these variances being different was found to be 0.04, this can be seen [here](http://nbviewer.ipython.org/github/SimonBiggs/Electron-Cutout-Factors/blob/master/scripts/statistics.ipynb). More data is required to confirm the improvement.
 
 
 
