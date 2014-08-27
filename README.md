@@ -37,7 +37,7 @@ Recommended Programs
 
 
  * [Libre Office](http://donate.libreoffice.org/home/dl/win-x86/4.3.0/en-US/LibreOffice_4.3.0_Win_x86.msi) — Works in a less confusing manner with csv files than Microsoft Excel
- * [Google Chrome](https://www.google.com/intl/en-AU/chrome/browser/) — The html reports have an improved display in Google Chrome as opposed to Internet Explorer
+ * [Google Chrome](https://www.google.com/intl/en-AU/chrome/browser/)/[Firefox](https://www.mozilla.org/firefox/) — The html reports have an improved display in Chrome/Firefox as opposed to Internet Explorer
 
 
 
