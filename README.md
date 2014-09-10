@@ -22,6 +22,11 @@ On **Ubuntu 14.04 64-bit** I installed the following:
 
     sudo pip3 install runipy
     sudo pip3 install scipy
+    
+Later on will need shapely. This is installed using the following:
+
+    sudo apt-get install cython3 libgeos++-dev
+    sudo pip3 install shapely
 
 
 On **Windows 7 64-bit** I installed the following:
