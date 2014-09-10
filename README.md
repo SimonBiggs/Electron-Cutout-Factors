@@ -18,7 +18,10 @@ Dependencies
 
 On **Ubuntu 14.04 64-bit** I installed the following:
 
-    sudo apt-get install python3-numpy python3-matplotlib ipython3 ipython ipython3-notebook python3-pandas python3-nose python-pgm python-zmq python3-pip pandoc nodejs libatlas-base-dev gfortran python3-dev build-essential
+    sudo apt-get install python3-numpy python3-matplotlib ipython3 ipython \
+    ipython3-notebook python3-pandas python3-nose \
+    python-pgm python-zmq python3-pip pandoc nodejs \
+    libatlas-base-dev gfortran python3-dev build-essential
 
     sudo pip3 install runipy
     sudo pip3 install scipy
