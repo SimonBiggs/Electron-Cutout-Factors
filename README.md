@@ -1,3 +1,14 @@
+# This is a deprecated version of this code
+
+Please instead use the code found here:
+
+ * https://github.com/SimonBiggs/electronfactors
+
+
+
+
+
+
 Electron Cutout Factors
 =======================
 
