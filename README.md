@@ -1,9 +1,10 @@
-# This is a deprecated version of this code
+## Deprecation notice
 
-Please instead use the code found here:
+This repository is deprecated. All future development of the electron model will be undergone within the pymedphys package:
 
- * https://github.com/SimonBiggs/electronfactors
- 
+> https://github.com/CCA-Physics/pymedphys/blob/master/pymedphys/level1/electronfactors.py
+
+## Description
 
 # Where has the code gone?
 
